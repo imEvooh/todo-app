@@ -1,8 +1,9 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import userRouter from './src/routes/usersRoutes.js';
 import cookieParser from 'cookie-parser';
+import userRouter from './src/routes/usersRoutes.js';
+import taskRouter from './src/routes/tasksRoutes.js';
 
 dotenv.config();
 
@@ -21,10 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/", userRouter);
-
-app.get('/', (req, res) => {
-    res.send('Bienvenue sur mon API Todo !');
-});
+app.use("/tasks", taskRouter);
 
 app.listen(serverPort, () => {
     console.log(`Server is running on http://${host}:${serverPort}`);

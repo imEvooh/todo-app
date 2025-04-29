@@ -1,7 +1,7 @@
-import databasePool from '../config/db.js';
-import bcrypt from 'bcrypt';
-import asyncHandler from 'express-async-handler';
 import dotenv from 'dotenv';
+import databasePool from '../config/db.js';
+import asyncHandler from 'express-async-handler';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 dotenv.config();
