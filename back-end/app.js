@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import databasePool from './src/config/db.js';
+import cors from 'cors';
+import userRouter from './src/routes/usersRoutes.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -10,20 +12,14 @@ const host = process.env.DB_HOST || 'localhost';
 
 const app = express();
 
-app.use(express.urlencoded({ extended: false }));
-
-// Ping the database to check the connection ( temporary for testing )
-app.get('/ping_database', (req, res) => {
-    databasePool.query('SELECT id, username, "password" FROM public.users;', (err, result) => {
-        if (err) {
-            console.error('Error executing query', err.stack);
-            res.status(500).send('Database connection error');
-        } else {
-            console.log('Database connected:', result.rows[0]);
-            res.send(`Database connected: username is ${result.rows[0].username} and password is ${result.rows[0].password}`);
-        }
-    });
-});
+app.use(cors({
+    origin: 'http://localhost:8000',
+    credentials: true,
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use("/", userRouter);
 
 app.get('/', (req, res) => {
     res.send('Bienvenue sur mon API Todo !');
